@@ -26,7 +26,6 @@ pipeline {
         // SECURELY retrieve the GitHub Token from Jenkins Credentials
         // Make sure you have a Secret Text credential with ID 'github-token-secret'
         withCredentials([string(credentialsId: 'github-token-secret', variable: 'GITHUB_TOKEN_VALUE')]) {
-          
           // Pass the token to the Docker build command using --build-arg
           sh "docker build \
             --build-arg VITE_GITHUB_TOKEN=${GITHUB_TOKEN_VALUE} \
@@ -50,7 +49,8 @@ pipeline {
 
   stage('Deploy image'){
     steps{
-      sh 'docker run -d -p 8081:80 $IMAGE_NAME:$IMAGE_TAG'
+      sh 'docker rm -f github-portfolio || true'
+      sh 'docker run -d --name github-portfolio --restart unless-stopped-p 8081:80 $IMAGE_NAME:$IMAGE_TAG'
     }
    }
   }
