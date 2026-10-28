@@ -50,7 +50,7 @@ pipeline {
   stage('Deploy image'){
     steps{
       sh 'docker rm -f github-portfolio || true'
-      sh 'docker run -d --name github-portfolio --restart unless-stopped-p 8081:80 $IMAGE_NAME:$IMAGE_TAG'
+      sh 'docker run -d --name github-portfolio --restart unless-stopped -p 8081:80 $IMAGE_NAME:$IMAGE_TAG'
     }
    }
   }
